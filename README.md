@@ -9,7 +9,10 @@ from pyoformats import read
 read.file_info("test.msr")
 
 # returns 5d numpy array of image in series
-read.image_5d("test.msr", series=1)
+my_image = read.image_5d("test.msr", series=1)
+
+# at end of script
+read.JVM().shutdown()
 ```
 
 ## Installation
