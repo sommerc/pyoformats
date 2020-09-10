@@ -3,21 +3,22 @@ import tifffile
 import numpy as np
 import javabridge as jv
 import bioformats as bf
-
 from collections import namedtuple
 
 ShapeTXCYX = namedtuple("Shape", ["T", "Z", "C", "Y", "X"])
+"""5D shape object"""
 
 
 class JVM(object):
-    # log_config = os.path.join(os.path.split(__file__)[0], "res/log4j.properties")
+    """Java Virtual Machine pseudo-singleton
+    """
     started = False
 
     def start(self):
+        """Starts the JVM
+        """
         if not self.started:
             jv.start_vm(class_path=bf.JARS, max_heap_size="8G")  # ,
-            # args=["-Dlog4j.configuration=file:{}".format(self.log_config),],
-            # run_headless=True)
             JVM.started = True
 
     def shutdown(self):
@@ -26,6 +27,17 @@ class JVM(object):
 
 
 def get_numpy_pixel_type(pixel_type_int):
+    """Returns the correct numpy dtype from bioformats.FormatTools integers
+
+    Args:
+        pixel_type_int (int): pixel type integer from bioformats.FormatTools
+
+    Raises:
+        RuntimeError: if pixel type not understood
+
+    Returns:
+        numpy.dtype: the pixel type
+    """
 
     if pixel_type_int == 0:
         dype = np.int8
@@ -51,26 +63,18 @@ def get_numpy_pixel_type(pixel_type_int):
 
 
 def metadata(file_name):
-    """Read the meta data and return the metadata object.
+    """Read the meta data and return the OME metadata object.
     """
     meta = bf.get_omexml_metadata(file_name)
-    metadata = bf.omexml.OMEXML(meta)
-    return metadata
-
-
-# def get_channel(metadata, channel):
-#     """Return the channel name from the metadata object"""
-#     try:
-#         channel_name = metadata.image().Pixels.Channel(channel).Name
-#     except:
-#         return
-
-#     if channel_name is None:
-#         return
-#     return channel_name.replace("/", "_")
+    return = bf.omexml.OMEXML(meta)
 
 
 def file_info(file_name):
+    """Displays the name and shape of all available series in file_name
+
+    Args:
+        file_name (str): path to file
+    """
     JVM().start()
 
     meta_data = metadata(file_name)
@@ -96,6 +100,16 @@ def _get_TXCYX_shape(reader):
 
 
 def image_5d(file_name, series=0, rescale=False):
+    """Read a single series as 5d numpy array
+
+    Args:
+        file_name (str): path to file
+        series (int, optional): series to open. Defaults to 0.
+        rescale (bool, optional): rescale to min/max. Defaults to False.
+
+    Returns:
+        numpy.array: 5d numpy array
+    """
     JVM().start()
 
     with bf.ImageReader(file_name) as reader:
