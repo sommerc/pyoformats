@@ -87,7 +87,7 @@ def file_info(file_name):
             shape = _get_TXCYX_shape(reader)
             name = meta_data.image(s).get_Name()
 
-            print(f"Series {0}: {name}, {shape}")
+            print(f"Series {s}: {name}, {shape}")
 
 
 def _get_TXCYX_shape(reader):
