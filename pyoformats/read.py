@@ -12,6 +12,7 @@ ShapeTXCYX = namedtuple("Shape", ["T", "Z", "C", "Y", "X"])
 class JVM(object):
     """Java Virtual Machine pseudo-singleton
     """
+
     started = False
 
     def start(self):
@@ -66,7 +67,7 @@ def metadata(file_name):
     """Read the meta data and return the OME metadata object.
     """
     meta = bf.get_omexml_metadata(file_name)
-    return = bf.omexml.OMEXML(meta)
+    return bf.omexml.OMEXML(meta)
 
 
 def file_info(file_name):
