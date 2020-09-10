@@ -17,7 +17,12 @@ read.JVM().shutdown()
 
 ## Installation
 
-1. git clone <this-repo>
+#### Directly from gitlab
+`pip install git+https://git.ist.ac.at/csommer/pyoformats.git`
+
+#### or local
+
+1. `git clone https://git.ist.ac.at/csommer/pyoformats.git`
 2. `cd pyoformats`
 3. pip install -e .
 

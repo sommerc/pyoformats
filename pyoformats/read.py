@@ -1,5 +1,4 @@
 import os
-import tifffile
 import numpy as np
 import javabridge as jv
 import bioformats as bf
