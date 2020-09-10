@@ -18,12 +18,12 @@ class JVM(object):
     def start(self):
         """Starts the JVM
         """
-        if not self.started:
-            jv.start_vm(class_path=bf.JARS, max_heap_size="8G")  # ,
+        if not JVM.started:
+            jv.start_vm(class_path=bf.JARS, max_heap_size="8G")
             JVM.started = True
 
     def shutdown(self):
-        if self.started:
+        if JVM.started:
             jv.kill_vm()
 
 
