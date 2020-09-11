@@ -4,7 +4,7 @@ import javabridge as jv
 import bioformats as bf
 from collections import namedtuple
 
-ShapeTXCYX = namedtuple("Shape", ["T", "Z", "C", "Y", "X"])
+ShapeTZCYX = namedtuple("Shape", ["T", "Z", "C", "Y", "X"])
 """5D shape object"""
 
 
@@ -82,7 +82,7 @@ def file_info(file_name):
     with bf.ImageReader(file_name) as reader:
         n_series = reader.rdr.getSeriesCount()
         for s in range(n_series):
-            reader.rdr.setSeries(0)
+            reader.rdr.setSeries(s)
             shape = _get_TXCYX_shape(reader)
             name = meta_data.image(s).get_Name()
 
@@ -96,7 +96,7 @@ def _get_TXCYX_shape(reader):
     c_size = reader.rdr.getSizeC()
     t_size = reader.rdr.getSizeT()
 
-    return ShapeTXCYX(t_size, z_size, c_size, y_size, x_size)
+    return ShapeTZCYX(t_size, z_size, c_size, y_size, x_size)
 
 
 def image_5d(file_name, series=0, rescale=False):
@@ -116,7 +116,6 @@ def image_5d(file_name, series=0, rescale=False):
         reader.rdr.setSeries(series)
 
         dtype = get_numpy_pixel_type(reader.rdr.getPixelType())
-
         t_size, z_size, c_size, y_size, x_size = _get_TXCYX_shape(reader)
 
         img_5d = np.zeros((t_size, z_size, c_size, y_size, x_size), dtype=dtype)
