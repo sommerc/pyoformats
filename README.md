@@ -5,6 +5,9 @@ Simple wrapper for python-formats
 ```python
 from pyoformats import read
 
+# start JVM
+read.JVM().start()
+
 # displays names and shapes of all available series in file
 read.file_info("test.msr")
 
