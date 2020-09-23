@@ -18,10 +18,10 @@ my_image = read.image_5d("test.msr", series=1)
 n_series = read.series_count("test.msr")
 
 # get physical pixel sizes
-xyz_sizes = read.pixel_sizes_xyz("H:/projects/065_bioformats_wrapper/pyoformats/test.msr", series=0)
+xyz_sizes = read.pixel_sizes_xyz("test.msr", series=0)
 
 # get physical pixel units
-xyz_sizes = read.pixel_sizes_xyz_units("H:/projects/065_bioformats_wrapper/pyoformats/test.msr", series=0)
+xyz_sizes = read.pixel_sizes_xyz_units("test.msr", series=0)
 
 # iterate over all series and extract name and pixel data
 for s, data in read.image_5d_iterator("test.msr"):
