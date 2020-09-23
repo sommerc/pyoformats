@@ -65,8 +65,83 @@ def get_numpy_pixel_type(pixel_type_int):
 def metadata(file_name):
     """Read the meta data and return the OME metadata object.
     """
+    JVM().start()
+
     meta = bf.get_omexml_metadata(file_name)
     return bf.omexml.OMEXML(meta)
+
+
+def series_count(file_name):
+    """Return number of series in File
+
+    Args:
+        file_name (str): path to file
+
+    Returns:
+        int: Number of series in File
+    """
+    JVM().start()
+    with bf.ImageReader(file_name) as reader:
+        return reader.rdr.getSeriesCount()
+
+
+def pixel_sizes_xyz(file_name, series=0):
+    """Read physical pixel sizes in XYZ
+
+    Args:
+        file_name (str): path to file
+        series (int, optional): Series. Defaults to 0.
+
+    Returns:
+        numpy.array(float): 3x1 array of pixel sizes in XYZ
+    """
+    meta = metadata(file_name)
+    return np.asarray(
+        [
+            meta.image(series).Pixels.PhysicalSizeX,
+            meta.image(series).Pixels.PhysicalSizeY,
+            meta.image(series).Pixels.PhysicalSizeZ,
+        ]
+    )
+
+
+def pixel_sizes_xyz_units(file_name, series=0):
+    """Read physical units of XYZ
+
+    Args:
+        file_name (str): path to file
+        series (int, optional): Series. Defaults to 0.
+
+    Returns:
+        numpy.array(str): 3x1 array of pixel units as string
+    """
+    meta = metadata(file_name)
+    return np.asarray(
+        [
+            meta.image(series).Pixels.PhysicalSizeXUnit,
+            meta.image(series).Pixels.PhysicalSizeYUnit,
+            meta.image(series).Pixels.PhysicalSizeZUnit,
+        ]
+    )
+
+
+def image_5d_iterator(file_name, rescale=False):
+    """Iterate over all series with (name, data)
+
+    Args:
+        file_name (str): path to file
+        rescale (bool, optional): rescale to min/max. Defaults to False.
+
+    Yields:
+        (str, numpy.array): Tuple of series name and pixel content as 5D array
+    """
+    JVM().start()
+
+    meta_data = metadata(file_name)
+    n_series = series_count(file_name)
+    for s in range(n_series):
+        name = meta_data.image(s).get_Name()
+        yield name, image_5d(file_name, series=s, rescale=rescale)
 
 
 def file_info(file_name):

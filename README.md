@@ -14,6 +14,20 @@ read.file_info("test.msr")
 # returns 5d numpy array of image in series
 my_image = read.image_5d("test.msr", series=1)
 
+# get series count of file
+n_series = read.series_count("test.msr")
+
+# get physical pixel sizes
+xyz_sizes = read.pixel_sizes_xyz("H:/projects/065_bioformats_wrapper/pyoformats/test.msr", series=0)
+
+# get physical pixel units
+xyz_sizes = read.pixel_sizes_xyz_units("H:/projects/065_bioformats_wrapper/pyoformats/test.msr", series=0)
+
+# iterate over all series and extract name and pixel data
+for s, data in read.image_5d_iterator("test.msr"):
+    print(s, data.shape)
+
+
 # at end of script
 read.JVM().shutdown()
 ```
