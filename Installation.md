@@ -50,7 +50,7 @@ Now, we have to install the python packages that we need for everything to work.
 
 Then type / copy paste the following line-by-line (I’m putting explanations in brackets)
 
-## Create and activate the python environment
+### Create and activate the python environment
 
 _conda create -n pyoformats python=3.8.5_
 (Conda is the python package manager that comes with anaconda. It’s essentially making sure that, when you install new packages, they are compatible with all the other things you have already installed and that the new package finds all the dependencies it needs.
