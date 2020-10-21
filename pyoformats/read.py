@@ -184,7 +184,7 @@ def image_5d(
     Args:
         file_name (str): path to file
         series (int, optional): series to open. Defaults to 0.
-        rescale (bool, optional): rescale to min/max. Defaults to False.
+        rescale (bool, optional): rescale each plane to min/max. Defaults to False.
         frames (list[int], optional): list of frame indices to read. Defaults to None.
         zslices (list[int], optional): list of zslice indices to read. Defaults to None.
         channels (list[int], optional): list of channel indices to read. Defaults to None.
