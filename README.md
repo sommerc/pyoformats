@@ -11,11 +11,14 @@ read.JVM().start()
 # displays names and shapes of all available series in file
 read.file_info("test.msr")
 
+# get series count of file
+n_series = read.series_count("test.msr")
+
 # returns 5d numpy array of image in series
 my_image = read.image_5d("test.msr", series=1)
 
-# get series count of file
-n_series = read.series_count("test.msr")
+# read only certain z-slices. (Note, also channels and frames can be selected)
+my_image = read.image_5d("test.msr", series=1, zslices=[2, 3, 5, 8, 13])
 
 # get physical pixel sizes
 xyz_sizes = read.pixel_sizes_xyz("test.msr", series=0)
@@ -34,7 +37,7 @@ read.JVM().shutdown()
 
 ## Installation
 
-#### Installing dependencies (Windows/MacOS)
+#### Detailed How-To for installing dependencies (Windows/ MacOS)
 
 Before you install the pyformats Python package, check out detailed instructions for [installing dependencies](Installation.md).
 

@@ -9,7 +9,9 @@ ShapeTZCYX = namedtuple("Shape", ["T", "Z", "C", "Y", "X"])
 
 
 class JVM(object):
-    """Java Virtual Machine pseudo-singleton
+    """Java Virtual Machine pseudo-singleton.
+
+    The Java VM can only be started once. Shutdown JVM only, if not required anymore.
     """
 
     started = False
@@ -174,17 +176,23 @@ def _get_TXCYX_shape(reader):
     return ShapeTZCYX(t_size, z_size, c_size, y_size, x_size)
 
 
-def image_5d(file_name, series=0, rescale=False):
+def image_5d(
+    file_name, series=0, rescale=False, frames=None, zslices=None, channels=None
+):
     """Read a single series as 5d numpy array
 
     Args:
         file_name (str): path to file
         series (int, optional): series to open. Defaults to 0.
         rescale (bool, optional): rescale to min/max. Defaults to False.
+        frames (list[int], optional): list of frame indices to read. Defaults to None.
+        zslices (list[int], optional): list of zslice indices to read. Defaults to None.
+        channels (list[int], optional): list of channel indices to read. Defaults to None.
 
     Returns:
-        numpy.array: 5d numpy array
+        numpy.array: 5d numpy array (TZCYX)
     """
+
     JVM().start()
 
     with bf.ImageReader(file_name) as reader:
@@ -193,13 +201,30 @@ def image_5d(file_name, series=0, rescale=False):
         dtype = get_numpy_pixel_type(reader.rdr.getPixelType())
         t_size, z_size, c_size, y_size, x_size = _get_TXCYX_shape(reader)
 
-        img_5d = np.zeros((t_size, z_size, c_size, y_size, x_size), dtype=dtype)
+        t_list = range(t_size)
+        if frames is not None:
+            t_list = sorted(list(set(frames) & set(t_list)))
+        assert len(t_list) > 0, "Please choose at least one valid frame"
 
-        for t in range(t_size):
-            for z in range(z_size):
-                for c in range(c_size):
-                    img_5d[t, z, c, :, :] = reader.read(
-                        series=series, z=z, t=t, c=c, rescale=False
+        z_list = range(z_size)
+        if zslices is not None:
+            z_list = sorted(list(set(zslices) & set(z_list)))
+        assert len(z_list) > 0, "Please choose at least one valid z-slice"
+
+        c_list = range(c_size)
+        if channels is not None:
+            c_list = sorted(list(set(channels) & set(c_list)))
+        assert len(c_list) > 0, "Please choose at least one valid channel"
+
+        img_5d = np.zeros(
+            (len(t_list), len(z_list), len(c_list), y_size, x_size), dtype=dtype
+        )
+
+        for ti, t in enumerate(t_list):
+            for zi, z in enumerate(z_list):
+                for ci, c in enumerate(c_list):
+                    img_5d[ti, zi, ci, :, :] = reader.read(
+                        series=series, z=z, t=t, c=c, rescale=rescale
                     )
     return img_5d
 
