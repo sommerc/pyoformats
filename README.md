@@ -34,14 +34,18 @@ read.JVM().shutdown()
 
 ## Installation
 
-#### Directly from gitlab
+#### Installing dependencies (Windows/MacOS)
+
+Before you install the pyformats Python package, check out detailed instructions for [installing dependencies](Installation.md).
+
+#### pyoformats directly from gitlab
 `pip install git+https://git.ist.ac.at/csommer/pyoformats.git`
 
 #### or local
 
 1. `git clone https://git.ist.ac.at/csommer/pyoformats.git`
 2. `cd pyoformats`
-3. pip install -e .
+3.  `pip install -e .`
 
 ## Dependencies
 * numpy
