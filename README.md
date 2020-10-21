@@ -39,13 +39,15 @@ read.JVM().shutdown()
 
 #### Detailed How-To for installing dependencies (Windows/ MacOS)
 
-Before you install the pyformats Python package, check out detailed instructions for [installing dependencies](Installation.md).
+Before you install the pyoformats Python package, check out detailed instructions for [installing dependencies](Installation.md).
+
+#### from PyPi
+`pip install pyoformats`
 
 #### pyoformats directly from gitlab
 `pip install git+https://git.ist.ac.at/csommer/pyoformats.git`
 
 #### or local
-
 1. `git clone https://git.ist.ac.at/csommer/pyoformats.git`
 2. `cd pyoformats`
 3.  `pip install -e .`

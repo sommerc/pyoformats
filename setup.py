@@ -25,8 +25,8 @@ setup(
         "License :: OSI Approved :: BSD License",
     ],
     #    entry_points = {'console_scripts': []},
-    author="Christoph Sommer",
-    author_email="christoph.sommer23@gmail.com",
+    author="Christoph Sommer, Wiebke Jahr",
+    author_email="christoph.sommer23@gmail.com, wiebke.jahr@ist.ac.at",
     install_requires=["numpy", "javabridge", "python-bioformats",],
 )
 
