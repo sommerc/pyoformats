@@ -28,5 +28,6 @@ setup(
     author="Christoph Sommer, Wiebke Jahr",
     author_email="christoph.sommer23@gmail.com, wiebke.jahr@ist.ac.at",
     install_requires=["numpy", "javabridge", "python-bioformats",],
+    include_package_data=True,
 )
 
