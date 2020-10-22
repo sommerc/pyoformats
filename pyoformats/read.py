@@ -21,6 +21,7 @@ class JVM(object):
         """
         if not JVM.started:
             jv.start_vm(class_path=bf.JARS, max_heap_size="8G")
+            bf.init_logger()
             JVM.started = True
 
     def shutdown(self):
