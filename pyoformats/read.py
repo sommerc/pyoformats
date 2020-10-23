@@ -8,7 +8,16 @@ ShapeTZCYX = namedtuple("Shape", ["T", "Z", "C", "Y", "X"])
 """5D shape object"""
 
 
-class JVM(object):
+class Singleton(type):
+    _instances = {}
+
+    def __call__(cls, *args, **kwargs):
+        if cls not in cls._instances:
+            cls._instances[cls] = super(Singleton, cls).__call__(*args, **kwargs)
+        return cls._instances[cls]
+
+
+class JVM(metaclass=Singleton):
     """Java Virtual Machine pseudo-singleton.
 
     The Java VM can only be started once. Shutdown JVM only, if not required anymore.
@@ -20,12 +29,25 @@ class JVM(object):
         """Starts the JVM
         """
         if not JVM.started:
-            jv.start_vm(class_path=bf.JARS, max_heap_size="8G")
+            log_config = os.path.join(
+                os.path.abspath(os.path.split(__file__)[0]), "res/log4j.properties"
+            )
+            args = []
+            if os.path.exists(log_config):
+
+                args.append(f"-Dlog4j.configuration=file:{log_config}")
+            else:
+                print("Warning: JVM(): log4j config properties not found...")
+
+            jv.start_vm(class_path=bf.JARS, max_heap_size="8G", args=args)
             JVM.started = True
 
     def shutdown(self):
         if JVM.started:
             jv.kill_vm()
+
+    def __del__(self):
+        self.shutdown()
 
 
 def get_numpy_pixel_type(pixel_type_int):
